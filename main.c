@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "reader.h"
+
 int main(void)
 {
-    printf("Hello world!\n");
-    const int c = 10;
-    int* ptr = (int*)&c;
+    reader_read(NULL);
+    return 0;
 }

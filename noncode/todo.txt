@@ -1,0 +1,4 @@
+- buffer1
+- reader on thread
+- analazyer
+- unit tests

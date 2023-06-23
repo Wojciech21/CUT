@@ -105,6 +105,10 @@ void print_list(Cpu_list* list)
 
 void delete_list(Cpu_list* list)
 {
+    if(list == NULL)
+    {
+        return;
+    }
     while(list->head->next != NULL)
     {
         Cpu_node* prev;

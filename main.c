@@ -2,9 +2,14 @@
 #include <stdlib.h>
 
 #include "reader.h"
+#include "buffer.h"
 
 int main(void)
 {
-    reader_read(NULL);
+    Buffer* buffer1 = buffer_create();
+
+    reader_init(buffer1);
+
+    buffer_delete(buffer1);
     return 0;
 }

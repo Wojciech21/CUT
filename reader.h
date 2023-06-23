@@ -3,7 +3,9 @@
 
 #include <pthread.h>
 
-void reader_createThread(void);
-void* reader_read(void* param);
+#include "buffer.h"
+
+void reader_init(Buffer* buffer);
+
 
 #endif

@@ -1,4 +1,4 @@
-- buffer1
-- reader on thread
-- analazyer
+- sigterm
+- analyzer
 - unit tests
+- worker consumer problem

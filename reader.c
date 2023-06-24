@@ -5,7 +5,7 @@
 
 #include "reader.h"
 #include "cpu_list.h"
-
+#include "sigterm.h"
 
 void* read_file(void* param)
 {
@@ -13,7 +13,7 @@ void* read_file(void* param)
     char buffer[1024];
     
     unsigned long user, nice, system ,idle, iowait, irq, softirg, steal;
-    for(int idk=0; idk<20; idk++)
+    while(!sigterm_is_done())
     {
         Cpu_list* cpu_list = create_list();
         file = fopen("/proc/stat", "r");
@@ -40,6 +40,7 @@ void* read_file(void* param)
         buffer_add_list((Buffer*)param, cpu_list);
         buffer_print((Buffer*)param);
         fclose(file);
+        sleep(1);
     }
     return NULL;
 }

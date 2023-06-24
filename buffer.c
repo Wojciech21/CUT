@@ -4,7 +4,7 @@
 #include "buffer.h"
 
 
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 20
 
 typedef struct buffer_node
 {
@@ -33,8 +33,7 @@ Buffer* buffer_create(void)
         printf("buffer node memory allocation error\n");
         return NULL;
     }
-    buffer->head = first_node;
-    buffer->tail = first_node;
+    
 
     Buffer_node* temp = first_node;
     for(int i=0; i<BUFFER_SIZE-1; i++)
@@ -51,19 +50,31 @@ Buffer* buffer_create(void)
     temp->cpu_list = NULL;
     temp->next = first_node;
 
+    buffer->tail = first_node;
+    buffer->head = first_node;
     return buffer;
 }
 
 void buffer_add_list(Buffer* buffer, Cpu_list* list)
 {
-    if(buffer->head == buffer->tail)
-    {
-        delete_list(buffer->head->cpu_list);
-        buffer->tail = buffer->tail->next;
-    }
+    // printf("A");
+    delete_list(buffer->head->cpu_list);
     buffer->head->cpu_list = list;
     buffer->head = buffer->head->next;
+    if(buffer->head == buffer->tail)
+    {
+        buffer->tail = buffer->tail->next;
+    }
    
+}
+
+Cpu_list* buffer_get_list(Buffer* buffer)
+{
+    // printf("G");
+    Cpu_list* cpu_list = buffer->tail->cpu_list;
+    buffer->tail->cpu_list = NULL;
+    buffer->tail = buffer->tail->next;
+    return cpu_list;
 }
 
 void buffer_print(Buffer* buffer)
@@ -71,17 +82,21 @@ void buffer_print(Buffer* buffer)
     Buffer_node* curr = buffer->tail;
     while(curr->next != buffer->tail)
     {
+        if(curr==buffer->tail)
+            printf("[T]");
         if(curr==buffer->head)
-            printf("H");
-        else if(curr->cpu_list != NULL)
+            printf("[H]");
+        if(curr->cpu_list != NULL)
             printf("X");
         else
             printf("_");
         curr = curr->next;
     }
-     if(curr==buffer->head)
-            printf("H");
-        else if(curr->cpu_list != NULL)
+     if(curr==buffer->tail)
+            printf("[T]");
+        if(curr==buffer->head)
+            printf("[H]");
+        if(curr->cpu_list != NULL)
             printf("X");
         else
             printf("_");

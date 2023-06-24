@@ -1,4 +1,5 @@
-- sigterm
-- analyzer
 - unit tests
+- buffer2
+- buffer2 in analyzer
+- thread safe
 - worker consumer problem

@@ -2,10 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include "reader.h"
 #include "cpu_list.h"
 #include "sigterm.h"
+
+static pthread_t tid;
 
 void* read_file(void* param)
 {
@@ -47,8 +50,10 @@ void* read_file(void* param)
 
 void reader_init(Buffer* buffer)
 {
-    pthread_t tid;
-    // read_file(buffer);
     pthread_create(&tid, NULL, read_file, buffer);
+}
+
+void reader_join()
+{
     pthread_join(tid, NULL);
 }

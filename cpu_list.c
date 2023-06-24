@@ -17,7 +17,7 @@ typedef struct cpu_node
     unsigned long idle;
     unsigned long iowait;
     unsigned long irq;
-    unsigned long softirg;
+    unsigned long softirq;
     unsigned long steal;
     struct cpu_node* next;
 } Cpu_node;
@@ -42,7 +42,7 @@ void add_to_list(Cpu_list* const list,
     const unsigned long idle,
     const unsigned long iowait,
     const unsigned long irq,
-    const unsigned long softirg,
+    const unsigned long softirq,
     const unsigned long steal)
 {
     if(list == NULL)
@@ -66,7 +66,7 @@ void add_to_list(Cpu_list* const list,
         .idle = idle,
         .iowait = iowait,
         .irq = irq,
-        .softirg = softirg,
+        .softirq = softirq,
         .steal = steal,
         .next = NULL
     };
@@ -97,7 +97,7 @@ void print_list(Cpu_list* list)
         node->idle, 
         node->iowait, 
         node->irq, 
-        node->softirg, 
+        node->softirq, 
         node->steal);
         node = node->next;
     }
@@ -123,4 +123,44 @@ void delete_list(Cpu_list* list)
     }
     free(list->head);
     free(list);
+}
+
+long cpu_list_get_user(Cpu_list* list)
+{
+    return list->head->user;
+}
+
+long cpu_list_get_nice(Cpu_list* list)
+{
+    return list->head->nice;
+}
+
+long cpu_list_get_system(Cpu_list* list)
+{
+    return list->head->system;
+}
+
+long cpu_list_get_idle(Cpu_list* list)
+{
+    return list->head->idle;
+}
+
+long cpu_list_get_iowait(Cpu_list* list)
+{
+    return list->head->iowait;
+}
+
+long cpu_list_get_irq(Cpu_list* list)
+{
+    return list->head->irq;
+}
+
+long cpu_list_get_softirq(Cpu_list* list)
+{
+    return list->head->softirq;
+}
+
+long cpu_list_get_steal(Cpu_list* list)
+{
+    return list->head->steal;
 }

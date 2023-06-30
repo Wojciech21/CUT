@@ -18,7 +18,7 @@ void* read_file(void* param)
     unsigned long user, nice, system ,idle, iowait, irq, softirg, steal;
     while(!sigterm_is_done())
     {
-        Cpu_list* cpu_list = create_list();
+        Cpu_list* cpu_list = cpu_list_create();
         file = fopen("/proc/stat", "r");
         if (file == NULL)
         {
@@ -37,7 +37,7 @@ void* read_file(void* param)
                 printf("read file error\n");
                 return NULL;
             }
-            add_to_list(cpu_list, i, user, nice, system, idle, iowait, irq, softirg, steal);
+            cpu_list_add(cpu_list, i, user, nice, system, idle, iowait, irq, softirg, steal);
             i++;
         }
         buffer_add_list((Buffer*)param, cpu_list);

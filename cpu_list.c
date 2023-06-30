@@ -6,6 +6,7 @@
 struct cpu_list
 {
     struct cpu_node* head;
+    size_t size;
 };
 
 typedef struct cpu_node
@@ -22,7 +23,7 @@ typedef struct cpu_node
     struct cpu_node* next;
 } Cpu_node;
 
-Cpu_list* create_list(void)
+Cpu_list* cpu_list_create(void)
 {
     Cpu_list* list = malloc(sizeof(Cpu_list));
     if(list == NULL)
@@ -31,10 +32,11 @@ Cpu_list* create_list(void)
         return NULL;
     }
     list->head = NULL;
+    list->size = 0;
     return list;
 }
 
-void add_to_list(Cpu_list* const list,
+void cpu_list_add(Cpu_list* const list,
     const unsigned int cpu_num,
     const unsigned long user,
     const unsigned long nice,
@@ -70,6 +72,7 @@ void add_to_list(Cpu_list* const list,
         .steal = steal,
         .next = NULL
     };
+    list->size++;
 
     if(list->head == NULL)
     {
@@ -84,7 +87,7 @@ void add_to_list(Cpu_list* const list,
     temp->next = node;
 }
 
-void print_list(Cpu_list* list)
+void cpu_list_print(Cpu_list* list)
 {
     Cpu_node* node = list->head;
     while(node!=NULL)
@@ -103,26 +106,39 @@ void print_list(Cpu_list* list)
     }
 }
 
-void delete_list(Cpu_list* list)
+void cpu_list_delete(Cpu_list* list)
 {
     if(list == NULL)
     {
-        return;
+       return;
     }
-    while(list->head->next != NULL)
+    if(list->head != NULL)
     {
-        Cpu_node* prev;
-        Cpu_node* node = list->head;
-        while(node->next != NULL)
+        while(list->head->next != NULL)
         {
-            prev = node;
-            node = node->next;
+            Cpu_node* prev;
+            Cpu_node* node = list->head;
+            while(node->next != NULL)
+            {
+                prev = node;
+                node = node->next;
+            }
+            prev->next=NULL;
+            free(node);
         }
-        prev->next=NULL;
-        free(node);
     }
     free(list->head);
     free(list);
+}
+
+size_t cpu_list_get_size(Cpu_list* list)
+{
+    return list->size;
+}
+
+int cpu_list_get_cpu_num(Cpu_list* list)
+{
+    return list->head->cpu_num;
 }
 
 long cpu_list_get_user(Cpu_list* list)
@@ -163,4 +179,14 @@ long cpu_list_get_softirq(Cpu_list* list)
 long cpu_list_get_steal(Cpu_list* list)
 {
     return list->head->steal;
+}
+
+void cpu_list_next(Cpu_list* list)
+{
+    if(list == NULL) return;
+    if(list->head == NULL) return;
+    Cpu_node* next = list->head->next;
+    free(list->head);
+    list->head = next;
+    list->size--;
 }

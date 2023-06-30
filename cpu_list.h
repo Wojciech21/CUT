@@ -3,8 +3,8 @@
 
 typedef struct cpu_list Cpu_list;
 
-Cpu_list* create_list(void);
-void add_to_list(Cpu_list* const list,
+Cpu_list* cpu_list_create(void);
+void cpu_list_add(Cpu_list* const list,
     const unsigned int cpu_num,
     const unsigned long user,
     const unsigned long nice,
@@ -14,16 +14,18 @@ void add_to_list(Cpu_list* const list,
     const unsigned long irq,
     const unsigned long softirq,
     const unsigned long steal);
-void print_list(Cpu_list* list);
-void delete_list(Cpu_list* list);
-long cpu_list_get_user(Cpu_list* list);
-long cpu_list_get_nice(Cpu_list* list);
-long cpu_list_get_system(Cpu_list* list);
-long cpu_list_get_idle(Cpu_list* list);
-long cpu_list_get_iowait(Cpu_list* list);
-long cpu_list_get_irq(Cpu_list* list);
-long cpu_list_get_softirq(Cpu_list* list);
-long cpu_list_get_steal(Cpu_list* list);
+void cpu_list_delete(Cpu_list* list);
+size_t cpu_list_get_size(Cpu_list* list);
+unsigned int cpu_list_get_cpu_num(Cpu_list* list);
+unsigned long cpu_list_get_user(Cpu_list* list);
+unsigned long cpu_list_get_nice(Cpu_list* list);
+unsigned long cpu_list_get_system(Cpu_list* list);
+unsigned long cpu_list_get_idle(Cpu_list* list);
+unsigned long cpu_list_get_iowait(Cpu_list* list);
+unsigned long cpu_list_get_irq(Cpu_list* list);
+unsigned long cpu_list_get_softirq(Cpu_list* list);
+unsigned long cpu_list_get_steal(Cpu_list* list);
+void cpu_list_next(Cpu_list* list);
 
-
+void cpu_list_print(Cpu_list* list);
 #endif

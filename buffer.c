@@ -57,8 +57,10 @@ Buffer* buffer_create(void)
 
 void buffer_add_list(Buffer* buffer, Cpu_list* list)
 {
-    // printf("A");
-    delete_list(buffer->head->cpu_list);
+    if(buffer == NULL) return;
+    if(list == NULL) return;
+
+    cpu_list_delete(buffer->head->cpu_list);
     buffer->head->cpu_list = list;
     buffer->head = buffer->head->next;
     if(buffer->head == buffer->tail)
@@ -70,7 +72,6 @@ void buffer_add_list(Buffer* buffer, Cpu_list* list)
 
 Cpu_list* buffer_get_list(Buffer* buffer)
 {
-    // printf("G");
     Cpu_list* cpu_list = buffer->tail->cpu_list;
     buffer->tail->cpu_list = NULL;
     buffer->tail = buffer->tail->next;
@@ -117,7 +118,7 @@ void buffer_delete(Buffer* buffer)
     {
         curr = next;
         next = curr->next;
-        delete_list(curr->cpu_list);
+        cpu_list_delete(curr->cpu_list);
         free(curr);
     }
     

@@ -1,5 +1,6 @@
-- unit tests
+- analyzer cd
+- unit tests cd
+- thread safe
 - buffer2
 - buffer2 in analyzer
-- thread safe
 - worker consumer problem

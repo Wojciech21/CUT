@@ -30,6 +30,7 @@ void* read_file(void* param)
 
         while(fgets(buffer, sizeof(buffer), file) && strncmp(buffer, "cpu", 3)==0)
         {
+            // printf("%s", buffer);
             int scanVal = sscanf(buffer, "%*s %lu %lu %lu %lu %lu %lu %lu %lu %*d %*d",
                 &user, &nice, &system, &idle, &iowait, &irq, &softirg, &steal);
             if(scanVal<8)
@@ -41,7 +42,7 @@ void* read_file(void* param)
             i++;
         }
         buffer_add_list((Buffer*)param, cpu_list);
-        buffer_print((Buffer*)param);
+        // buffer_print((Buffer*)param);
         fclose(file);
         sleep(1);
     }

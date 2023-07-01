@@ -136,57 +136,110 @@ size_t cpu_list_get_size(Cpu_list* list)
     return list->size;
 }
 
-int cpu_list_get_cpu_num(Cpu_list* list)
+unsigned int cpu_list_get_cpu_num(Cpu_list* list, int n)
 {
-    return list->head->cpu_num;
+    if(n==0) return list->head->cpu_num;
+    Cpu_node* node = list->head;
+    for(int i=0; i<n; i++)
+    {
+        if(node->next == NULL) return -1;
+        node = node->next;
+    }
+    return node->cpu_num;
 }
 
-long cpu_list_get_user(Cpu_list* list)
+unsigned long cpu_list_get_user(Cpu_list* list, int n)
 {
-    return list->head->user;
+    if(n==0) return list->head->user;
+    Cpu_node* node = list->head;
+    for(int i=0; i<n; i++)
+    {
+        if(node->next == NULL) return -1;
+        node = node->next;
+    }
+    return node->user;
 }
 
-long cpu_list_get_nice(Cpu_list* list)
+unsigned long cpu_list_get_nice(Cpu_list* list, int n)
 {
-    return list->head->nice;
+    if(n==0) return list->head->nice;
+    Cpu_node* node = list->head;
+    for(int i=0; i<n; i++)
+    {
+        if(node->next == NULL) return -1;
+        node = node->next;
+    }
+    return node->nice;
 }
 
-long cpu_list_get_system(Cpu_list* list)
+unsigned long cpu_list_get_system(Cpu_list* list, int n)
 {
-    return list->head->system;
+    if(n==0) return list->head->system;
+    Cpu_node* node = list->head;
+    for(int i=0; i<n; i++)
+    {
+        if(node->next == NULL) return -1;
+        node = node->next;
+    }
+    return node->system;
 }
 
-long cpu_list_get_idle(Cpu_list* list)
+unsigned long cpu_list_get_idle(Cpu_list* list, int n)
 {
-    return list->head->idle;
+    if(n==0) return list->head->idle;
+    Cpu_node* node = list->head;
+    for(int i=0; i<n; i++)
+    {
+        if(node->next == NULL) return -1;
+        node = node->next;
+    }
+    return node->idle;
 }
 
-long cpu_list_get_iowait(Cpu_list* list)
+unsigned long cpu_list_get_iowait(Cpu_list* list, int n)
 {
-    return list->head->iowait;
+    if(n==0) return list->head->iowait;
+    Cpu_node* node = list->head;
+    for(int i=0; i<n; i++)
+    {
+        if(node->next == NULL) return -1;
+        node = node->next;
+    }
+    return node->iowait;
 }
 
-long cpu_list_get_irq(Cpu_list* list)
+unsigned long cpu_list_get_irq(Cpu_list* list, int n)
 {
-    return list->head->irq;
+    if(n==0) return list->head->irq;
+    Cpu_node* node = list->head;
+    for(int i=0; i<n; i++)
+    {
+        if(node->next == NULL) return -1;
+        node = node->next;
+    }
+    return node->irq;
 }
 
-long cpu_list_get_softirq(Cpu_list* list)
+unsigned long cpu_list_get_softirq(Cpu_list* list, int n)
 {
-    return list->head->softirq;
+    if(n==0) return list->head->softirq;
+    Cpu_node* node = list->head;
+    for(int i=0; i<n; i++)
+    {
+        if(node->next == NULL) return -1;
+        node = node->next;
+    }
+    return node->softirq;
 }
 
-long cpu_list_get_steal(Cpu_list* list)
+unsigned long cpu_list_get_steal(Cpu_list* list, int n)
 {
-    return list->head->steal;
-}
-
-void cpu_list_next(Cpu_list* list)
-{
-    if(list == NULL) return;
-    if(list->head == NULL) return;
-    Cpu_node* next = list->head->next;
-    free(list->head);
-    list->head = next;
-    list->size--;
+    if(n==0) return list->head->steal;
+    Cpu_node* node = list->head;
+    for(int i=0; i<n; i++)
+    {
+        if(node->next == NULL) return -1;
+        node = node->next;
+    }
+    return node->steal;
 }

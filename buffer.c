@@ -70,12 +70,14 @@ void buffer_add_list(Buffer* buffer, Cpu_list* list)
    
 }
 
-Cpu_list* buffer_get_list(Buffer* buffer)
+Cpu_list** buffer_get_lists(Buffer* buffer)
 {
-    Cpu_list* cpu_list = buffer->tail->cpu_list;
+    Cpu_list** list_array = malloc(2*sizeof(Cpu_list*));
+    list_array[0] = buffer->tail->cpu_list;
+    list_array[1] = buffer->tail->next->cpu_list;
     buffer->tail->cpu_list = NULL;
     buffer->tail = buffer->tail->next;
-    return cpu_list;
+    return list_array;
 }
 
 void buffer_print(Buffer* buffer)

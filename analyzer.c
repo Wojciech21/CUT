@@ -25,7 +25,10 @@ void* analyze_data(void* param)
         free(cpu_lists);
         if(cpu_list_get_size(cpu_list_old)!=cpu_list_get_size(cpu_list_old)) return NULL;
         if(cpu_list_new == NULL || cpu_list_old == NULL)
-            printf("empty\n");
+        {
+            printf("too empty\n");
+            break;
+        }  
         else
         {
             size_t size = cpu_list_get_size(cpu_list_old);
@@ -48,6 +51,7 @@ void* analyze_data(void* param)
                 cpu_list_get_steal(cpu_list_new, i);
 
 
+        // free(cpu_list_new);
                 long total_old = idle_old + non_idle_old;
                 long total_new = idle_new + non_idle_new;
 
@@ -59,6 +63,10 @@ void* analyze_data(void* param)
                 printf("CPU %d usage: %.3f%%\n", cpu_num, CPU_usage);
             }
         }
+        cpu_list_delete(cpu_list_old);  
+        // free(cpu_lists[0]);
+        // free(cpu_lists[1]);
+
    }
    return NULL;
 }

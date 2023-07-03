@@ -67,7 +67,6 @@ void buffer_add_list(Buffer* buffer, Cpu_list* list)
     {
         buffer->tail = buffer->tail->next;
     }
-   
 }
 
 Cpu_list** buffer_get_lists(Buffer* buffer)

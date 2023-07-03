@@ -1,6 +1,6 @@
-- analyzer cd
 - unit tests cd
 - thread safe
 - buffer2
+- analyzer to buffer2
 - buffer2 in analyzer
 - worker consumer problem

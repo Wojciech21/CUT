@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -pedantic -std=c99 -ggdb3 -pthread
 # List of source files
-SRCS = sigterm.c main.c cpu_list.c buffer.c reader.c analyzer.c
+SRCS = sigterm.c main.c cpu_stat_list.c cpu_stat_buffer.c cpu_usage_list.c cpu_usage_buffer.c reader.c analyzer.c
 
 # List of object files
 OBJS = $(SRCS:.c=.o)

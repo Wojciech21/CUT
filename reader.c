@@ -5,7 +5,7 @@
 #include <pthread.h>
 
 #include "reader.h"
-#include "cpu_list.h"
+#include "cpu_stat_list.h"
 #include "sigterm.h"
 
 static pthread_t tid;
@@ -18,7 +18,7 @@ void* read_file(void* param)
     unsigned long user, nice, system ,idle, iowait, irq, softirg, steal;
     while(!sigterm_is_done())
     {
-        Cpu_list* cpu_list = cpu_list_create();
+        Cpu_stat_list* cpu_stat_list = cpu_stat_list_create();
         file = fopen("/proc/stat", "r");
         if (file == NULL)
         {
@@ -38,18 +38,20 @@ void* read_file(void* param)
                 printf("read file error\n");
                 return NULL;
             }
-            cpu_list_add(cpu_list, i, user, nice, system, idle, iowait, irq, softirg, steal);
+            cpu_stat_list_add(cpu_stat_list, i, user, nice, system, idle, iowait, irq, softirg, steal);
             i++;
         }
-        buffer_add_list((Buffer*)param, cpu_list);
+        cpu_stat_buffer_add_list((Cpu_stat_buffer*)param, cpu_stat_list);
         // buffer_print((Buffer*)param);
         fclose(file);
+
         sleep(1);
+
     }
     return NULL;
 }
 
-void reader_init(Buffer* buffer)
+void reader_init(Cpu_stat_buffer* buffer)
 {
     pthread_create(&tid, NULL, read_file, buffer);
 }

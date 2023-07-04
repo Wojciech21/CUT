@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-#include "buffer_test.h"
+#include "cpu_stat_buffer_test.h"
 
 int main(void)
 {
-    buffer_create_test();
-    buffer_add_get_test();
+    cpu_stat_buffer_create_test();
+    cpu_stat_buffer_add_get_test();
 
     return 0;
 }

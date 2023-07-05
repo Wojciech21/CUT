@@ -28,12 +28,14 @@ void* analyze_data(void* arg)
         sleep(2);
         Cpu_stat_list** cpu_stat_lists = cpu_stat_buffer_get_lists(buffer1);
         Cpu_stat_list* cpu_stat_list_old = cpu_stat_lists[0];
-        // cpu_stat_buffer_print(buffer1);
+
+        //TODO check buffor size
         if(cpu_stat_list_old==NULL) return NULL;
         Cpu_stat_list* cpu_stat_list_new = cpu_stat_lists[1];
         if(cpu_stat_list_new==NULL) return NULL;
         free(cpu_stat_lists);
-        if(cpu_stat_list_get_size(cpu_stat_list_old)!=cpu_stat_list_get_size(cpu_stat_list_old)) return NULL;
+
+        if(cpu_stat_list_get_size(cpu_stat_list_old)!=cpu_stat_list_get_size(cpu_stat_list_old)) break;
         if(cpu_stat_list_new == NULL || cpu_stat_list_old == NULL)
         {
             printf("too empty\n");
@@ -69,7 +71,6 @@ void* analyze_data(void* arg)
                 long idle_diff = idle_new - idle_old;
 
                 float CPU_usage = (total_diff - idle_diff)*100.0 / total_diff;
-                
                 cpu_usage_list_add(cpu_usage_list, cpu_num, CPU_usage);
             }
             cpu_usage_buffer_add_list(buffer2, cpu_usage_list);

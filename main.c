@@ -4,6 +4,7 @@
 
 #include "reader.h"
 #include "analyzer.h"
+#include "printer.h"
 #include "cpu_stat_buffer.h"
 #include "cpu_usage_buffer.h"
 #include "sigterm.h"
@@ -16,10 +17,12 @@ int main(void)
     Cpu_usage_buffer* buffer2 = cpu_usage_buffer_create();
 
     reader_init(buffer1);
-    analyzer_init(buffer1, buffer2);
+    // analyzer_init(buffer1, buffer2);
+    // printer_init(buffer2);
 
     reader_join();
-    analyzer_join();
+    // analyzer_join();
+    // printer_join();
 
     cpu_stat_buffer_delete(buffer1);
     cpu_usage_buffer_delete(buffer2);

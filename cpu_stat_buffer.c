@@ -4,7 +4,7 @@
 #include "cpu_stat_buffer.h"
 
 
-#define BUFFER_SIZE 20
+#define BUFFER_SIZE 4
 
 typedef struct Cpu_stat_buffer_node
 {
@@ -17,6 +17,7 @@ struct Cpu_stat_buffer
 {
     Cpu_stat_buffer_node* head;
     Cpu_stat_buffer_node* tail; 
+    int item_count;
 };
 
 Cpu_stat_buffer* cpu_stat_buffer_create(void)
@@ -52,6 +53,7 @@ Cpu_stat_buffer* cpu_stat_buffer_create(void)
 
     buffer->tail = first_node;
     buffer->head = first_node;
+    buffer->item_count = 0;
     return buffer;
 }
 
@@ -67,6 +69,10 @@ void cpu_stat_buffer_add_list(Cpu_stat_buffer* buffer, Cpu_stat_list* list)
     {
         buffer->tail = buffer->tail->next;
     }
+    else
+    {
+        buffer->item_count++;
+    }
 }
 
 Cpu_stat_list** cpu_stat_buffer_get_lists(Cpu_stat_buffer* buffer)
@@ -76,34 +82,8 @@ Cpu_stat_list** cpu_stat_buffer_get_lists(Cpu_stat_buffer* buffer)
     list_array[1] = buffer->tail->next->cpu_stat_list;
     buffer->tail->cpu_stat_list = NULL;
     buffer->tail = buffer->tail->next;
+    buffer->item_count--;
     return list_array;
-}
-
-void cpu_stat_buffer_print(Cpu_stat_buffer* buffer)
-{
-    Cpu_stat_buffer_node* curr = buffer->tail;
-    while(curr->next != buffer->tail)
-    {
-        if(curr==buffer->tail)
-            printf("[T]");
-        if(curr==buffer->head)
-            printf("[H]");
-        if(curr->cpu_stat_list != NULL)
-            printf("X");
-        else
-            printf("_");
-        curr = curr->next;
-    }
-     if(curr==buffer->tail)
-            printf("[T]");
-        if(curr==buffer->head)
-            printf("[H]");
-        if(curr->cpu_stat_list != NULL)
-            printf("X");
-        else
-            printf("_");
-        curr = curr->next;
-    printf("\n");
 }
 
 void cpu_stat_buffer_delete(Cpu_stat_buffer* buffer)
@@ -122,7 +102,34 @@ void cpu_stat_buffer_delete(Cpu_stat_buffer* buffer)
         cpu_stat_list_delete(curr->cpu_stat_list);
         free(curr);
     }
-    
-
     free(buffer);
+}
+
+void cpu_stat_buffer_print(Cpu_stat_buffer* buffer)
+{
+    // Cpu_stat_buffer_node* curr = buffer->tail;
+    // while(curr->next != buffer->tail)
+    // {
+    //     if(curr==buffer->tail)
+    //         printf("[T]");
+    //     if(curr==buffer->head)
+    //         printf("[H]");
+    //     if(curr->cpu_stat_list != NULL)
+    //         printf("X");
+    //     else
+    //         printf("_");
+    //     curr = curr->next;
+    // }
+    //  if(curr==buffer->tail)
+    //         printf("[T]");
+    //     if(curr==buffer->head)
+    //         printf("[H]");
+    //     if(curr->cpu_stat_list != NULL)
+    //         printf("X");
+    //     else
+    //         printf("_");
+    //     curr = curr->next;
+    // printf("\n");
+    printf("cpu_stat_buffer: %d/%d\n", buffer->item_count, BUFFER_SIZE);
+
 }

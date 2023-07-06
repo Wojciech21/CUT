@@ -17,6 +17,7 @@ struct Cpu_usage_buffer
 {
     Cpu_usage_buffer_node* head;
     Cpu_usage_buffer_node* tail; 
+    int item_count;
 };
 
 Cpu_usage_buffer* cpu_usage_buffer_create(void)
@@ -52,6 +53,7 @@ Cpu_usage_buffer* cpu_usage_buffer_create(void)
 
     buffer->tail = first_node;
     buffer->head = first_node;
+    buffer->item_count = 0;
     return buffer;
 }
 
@@ -67,6 +69,11 @@ void cpu_usage_buffer_add_list(Cpu_usage_buffer* buffer, Cpu_usage_list* list)
     {
         buffer->tail = buffer->tail->next;
     }
+    else
+    {
+        buffer->item_count++;
+
+    }
 }
 
 Cpu_usage_list* cpu_usage_buffer_get_list(Cpu_usage_buffer* buffer)
@@ -74,6 +81,7 @@ Cpu_usage_list* cpu_usage_buffer_get_list(Cpu_usage_buffer* buffer)
     Cpu_usage_list* list = buffer->tail->cpu_usage_list;
     buffer->tail->cpu_usage_list = NULL;
     buffer->tail = buffer->tail->next;
+    buffer->item_count--;
     return list;
 }
 
@@ -103,27 +111,28 @@ void cpu_usage_buffer_delete(Cpu_usage_buffer* buffer)
 
 void cpu_usage_buffer_print(Cpu_usage_buffer* buffer)
 {
-    Cpu_usage_buffer_node* curr = buffer->tail;
-    while(curr->next != buffer->tail)
-    {
-        if(curr==buffer->tail)
-            printf("[T]");
-        if(curr==buffer->head)
-            printf("[H]");
-        if(curr->cpu_usage_list != NULL)
-            printf("X");
-        else
-            printf("_");
-        curr = curr->next;
-    }
-     if(curr==buffer->tail)
-            printf("[T]");
-        if(curr==buffer->head)
-            printf("[H]");
-        if(curr->cpu_usage_list != NULL)
-            printf("X");
-        else
-            printf("_");
-        curr = curr->next;
-    printf("\n");
+    // Cpu_usage_buffer_node* curr = buffer->tail;
+    // while(curr->next != buffer->tail)
+    // {
+    //     if(curr==buffer->tail)
+    //         printf("[T]");
+    //     if(curr==buffer->head)
+    //         printf("[H]");
+    //     if(curr->cpu_usage_list != NULL)
+    //         printf("X");
+    //     else
+    //         printf("_");
+    //     curr = curr->next;
+    // }
+    //  if(curr==buffer->tail)
+    //         printf("[T]");
+    //     if(curr==buffer->head)
+    //         printf("[H]");
+    //     if(curr->cpu_usage_list != NULL)
+    //         printf("X");
+    //     else
+    //         printf("_");
+    //     curr = curr->next;
+    // printf("\n");
+    printf("cpu_usage_buffer: %d/%d\n", buffer->item_count, BUFFER_SIZE);
 }

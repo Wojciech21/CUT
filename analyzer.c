@@ -76,6 +76,9 @@ void* analyze_data(void* arg)
             cpu_usage_buffer_add_list(buffer2, cpu_usage_list);
         }
         cpu_stat_list_delete(cpu_stat_list_old); 
+        printf("analyzer:\n");
+        cpu_stat_buffer_print(buffer1);
+        cpu_usage_buffer_print(buffer2);
         
    }
    return NULL;

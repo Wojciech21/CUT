@@ -33,7 +33,6 @@ void cpu_stat_buffer_add_get_test(void)
 	Cpu_stat_buffer* buffer = cpu_stat_buffer_create();
 
 
-
 	Cpu_stat_list* list = cpu_stat_list_create();
     cpu_stat_list_add(list, 1,2,3,4,5,6,7,8,9);
     cpu_stat_list_add(list, 10,20,30,40,50,60,70,80,90);

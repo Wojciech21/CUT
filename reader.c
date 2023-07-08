@@ -41,13 +41,17 @@ void* read_file(void* arg)
             cpu_stat_list_add(cpu_stat_list, i, user, nice, system, idle, iowait, irq, softirg, steal);
             i++;
         }
+        fclose(file);
+
+        cpu_stat_buffer_lock(buffer);
         cpu_stat_buffer_add_list(buffer, cpu_stat_list);
+        cpu_stat_buffer_call_analyzer(buffer);
+        cpu_stat_buffer_unlock(buffer);
 
         printf("reader:\n");
         cpu_stat_buffer_print(buffer);
-        fclose(file);
 
-        sleep(1);
+        sleep(3);
 
     }
     return NULL;

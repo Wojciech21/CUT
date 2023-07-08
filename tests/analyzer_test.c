@@ -28,11 +28,9 @@ void analyzer_read_test()
     cpu_stat_list_add(list4, 2, 375, 375, 400, 350, 350, 475, 450, 425);
     cpu_stat_buffer_add_list(buffer1, list4);
 
+
     analyzer_init(buffer1, buffer2);
-    // cpu_stat_list_delete(list1);
-    // cpu_stat_list_delete(list2);
-    // cpu_stat_list_delete(list3);
-    // cpu_stat_list_delete(list4);
+  
     analyzer_join();
 
     Cpu_usage_list* get_list1 = cpu_usage_buffer_get_list(buffer2);

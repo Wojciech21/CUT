@@ -15,17 +15,20 @@ void* print_data(void* arg)
 
     while(!sigterm_is_done())
     {
-        sleep(5);
-            
+        cpu_usage_buffer_lock(buffer);
+        if(cpu_usage_buffer_is_empty(buffer)) cpu_usage_buffer_wait_for_analyzer(buffer);
         Cpu_usage_list* list = cpu_usage_buffer_get_list(buffer);
 
-        for(size_t i=0; i<cpu_usage_list_get_size(list); i++)
+        size_t size = cpu_usage_list_get_size(list);
+        for(size_t i=0; i<size; i++)
         {
             if(i==0)
                 printf("CPU AVG USAGE %.3f%%\n", cpu_usage_list_get_percent(list, 0));
             else
                 printf("CPU %u. USAGE %.3f%%\n", cpu_usage_list_get_cpu_num(list, i), cpu_usage_list_get_percent(list, i));
         }
+        cpu_usage_buffer_unlock(buffer);
+
         cpu_usage_list_delete(list);
         printf("printer:\n");
         cpu_usage_buffer_print(buffer);

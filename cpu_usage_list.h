@@ -11,5 +11,6 @@ unsigned int cpu_usage_list_get_cpu_num(Cpu_usage_list* list, int n);
 float cpu_usage_list_get_percent(Cpu_usage_list* list, int n);
 
 
+
 void cpu_usage_list_print(Cpu_usage_list* list);
 #endif

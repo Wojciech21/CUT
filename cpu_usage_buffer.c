@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <pthread.h>
+
 #include "cpu_usage_buffer.h"
 
 
@@ -18,6 +20,8 @@ struct Cpu_usage_buffer
     Cpu_usage_buffer_node* head;
     Cpu_usage_buffer_node* tail; 
     int item_count;
+    pthread_mutex_t mutex;
+    pthread_cond_t can_get;
 };
 
 Cpu_usage_buffer* cpu_usage_buffer_create(void)
@@ -65,14 +69,13 @@ void cpu_usage_buffer_add_list(Cpu_usage_buffer* buffer, Cpu_usage_list* list)
     cpu_usage_list_delete(buffer->head->cpu_usage_list);
     buffer->head->cpu_usage_list = list;
     buffer->head = buffer->head->next;
-    if(buffer->head == buffer->tail)
+    if(buffer->item_count < BUFFER_SIZE)
     {
-        buffer->tail = buffer->tail->next;
+        buffer->item_count++;
     }
     else
     {
-        buffer->item_count++;
-
+        buffer->tail = buffer->tail->next;
     }
 }
 
@@ -108,6 +111,32 @@ void cpu_usage_buffer_delete(Cpu_usage_buffer* buffer)
 }
 
 
+bool cpu_usage_buffer_is_empty(Cpu_usage_buffer* buffer)
+{
+    return buffer->item_count == 0;
+}
+
+
+
+void cpu_usage_buffer_lock(Cpu_usage_buffer* buffer)
+{
+    pthread_mutex_lock(&buffer->mutex);
+}
+
+void cpu_usage_buffer_unlock(Cpu_usage_buffer* buffer)
+{
+    pthread_mutex_unlock(&buffer->mutex);
+}
+
+void cpu_usage_buffer_call_printer(Cpu_usage_buffer* buffer)
+{
+    pthread_cond_signal(&buffer->can_get);
+}
+
+void cpu_usage_buffer_wait_for_analyzer(Cpu_usage_buffer* buffer)
+{
+    pthread_cond_wait(&buffer->can_get, &buffer->mutex);
+}
 
 void cpu_usage_buffer_print(Cpu_usage_buffer* buffer)
 {

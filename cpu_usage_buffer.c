@@ -32,13 +32,20 @@ Cpu_usage_buffer* cpu_usage_buffer_create(void)
         printf("buffer memory allocation error\n");
         return NULL;
     }
-    Cpu_usage_buffer_node* first_node = malloc(sizeof(*first_node));
+    Cpu_usage_buffer_node* first_node = calloc(1, sizeof(*first_node));
     if(first_node == NULL)
     {
         printf("buffer node memory allocation error\n");
         return NULL;
     }
-    
+    *buffer = (Cpu_usage_buffer)
+    {
+        .head = first_node,   
+        .tail = first_node,
+        .item_count = 0, 
+        .mutex = PTHREAD_MUTEX_INITIALIZER,
+        .can_get = PTHREAD_COND_INITIALIZER
+    };
 
     Cpu_usage_buffer_node* temp = first_node;
     for(int i=0; i<BUFFER_SIZE-1; i++)
@@ -55,9 +62,6 @@ Cpu_usage_buffer* cpu_usage_buffer_create(void)
     temp->cpu_usage_list = NULL;
     temp->next = first_node;
 
-    buffer->tail = first_node;
-    buffer->head = first_node;
-    buffer->item_count = 0;
     return buffer;
 }
 

@@ -30,8 +30,9 @@ void* print_data(void* arg)
         cpu_usage_buffer_unlock(buffer);
 
         cpu_usage_list_delete(list);
-        printf("printer:\n");
-        cpu_usage_buffer_print(buffer);
+        // printf("printer:\n");
+        // cpu_usage_buffer_print(buffer);
+        sleep(1);
     }
     return NULL;
 }

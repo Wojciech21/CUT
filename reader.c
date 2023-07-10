@@ -43,16 +43,15 @@ void* read_file(void* arg)
         }
         fclose(file);
 
+        // sleep(1);
+
         cpu_stat_buffer_lock(buffer);
         cpu_stat_buffer_add_list(buffer, cpu_stat_list);
         cpu_stat_buffer_call_analyzer(buffer);
         cpu_stat_buffer_unlock(buffer);
 
-        printf("reader:\n");
-        cpu_stat_buffer_print(buffer);
-
-        sleep(3);
-
+        // printf("reader:\n");
+        // cpu_stat_buffer_print(buffer);
     }
     return NULL;
 }

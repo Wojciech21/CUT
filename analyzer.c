@@ -30,6 +30,7 @@ void* analyze_data(void* arg)
         {
             cpu_stat_buffer_wait_for_reader(buffer1);
         }
+
         Cpu_stat_list** cpu_stat_lists = cpu_stat_buffer_get_lists(buffer1);
         Cpu_stat_list* cpu_stat_list_old = cpu_stat_lists[0];
         if(cpu_stat_list_old==NULL) return NULL;
@@ -71,16 +72,19 @@ void* analyze_data(void* arg)
             cpu_usage_list_add(cpu_usage_list, cpu_num, CPU_usage);
             
         }
+        cpu_stat_list_delete(cpu_stat_list_old); 
+        
+
+        // sleep(3);
+
         cpu_usage_buffer_lock(buffer2);
         cpu_usage_buffer_add_list(buffer2, cpu_usage_list);
         cpu_usage_buffer_call_printer(buffer2);
         cpu_usage_buffer_unlock(buffer2);
 
-        cpu_stat_list_delete(cpu_stat_list_old); 
 
-        printf("analyzer:\n");
-        cpu_stat_buffer_print(buffer1);
-        cpu_usage_buffer_print(buffer2);
+        // cpu_stat_buffer_print(buffer1);
+        // cpu_usage_buffer_print(buffer2);
    }
    return NULL;
 }

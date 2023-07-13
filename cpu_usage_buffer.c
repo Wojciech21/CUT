@@ -19,9 +19,10 @@ struct Cpu_usage_buffer
 {
     Cpu_usage_buffer_node* head;
     Cpu_usage_buffer_node* tail; 
-    int item_count;
     pthread_mutex_t mutex;
     pthread_cond_t can_get;
+    int item_count;
+    char paading[4];
 };
 
 Cpu_usage_buffer* cpu_usage_buffer_create(void)

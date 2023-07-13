@@ -5,14 +5,14 @@
 
 #include "sigterm.h"
 
-volatile sig_atomic_t done = 0;
+static volatile sig_atomic_t done = 0;
  
-void term(int signum)
+static void term(int signum)
 {
     done = signum;
 }
  
-void sigterm_init()
+void sigterm_init(void)
 {
     struct sigaction action;
     memset(&action, 0, sizeof(struct sigaction));

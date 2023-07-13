@@ -12,7 +12,6 @@
 int main(void)
 {
     sigterm_init();
-    
     Cpu_stat_buffer* buffer1 = cpu_stat_buffer_create();
     Cpu_usage_buffer* buffer2 = cpu_usage_buffer_create();
 

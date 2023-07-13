@@ -4,6 +4,6 @@
 #include "cpu_stat_buffer.h"
 
 void reader_init(Cpu_stat_buffer* buffer);
-void reader_join();
+void reader_join(void);
 
 #endif

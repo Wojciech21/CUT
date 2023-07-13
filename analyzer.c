@@ -17,7 +17,7 @@ struct Buffers
     Cpu_usage_buffer* buffer2;
 };
 
-void* analyze_data(void* arg)
+static void* analyze_data(void* arg)
 {
     Cpu_stat_buffer* buffer1 = ((struct Buffers*)arg)->buffer1;
     Cpu_usage_buffer* buffer2 = ((struct Buffers*)arg)->buffer2;
@@ -33,15 +33,15 @@ void* analyze_data(void* arg)
 
         Cpu_stat_list** cpu_stat_lists = cpu_stat_buffer_get_lists(buffer1);
         Cpu_stat_list* cpu_stat_list_old = cpu_stat_lists[0];
-        if(cpu_stat_list_old==NULL) return NULL;
+        if(cpu_stat_list_old==NULL) break;
         Cpu_stat_list* cpu_stat_list_new = cpu_stat_lists[1];
-        if(cpu_stat_list_new==NULL) return NULL;
+        if(cpu_stat_list_new==NULL) break;
         free(cpu_stat_lists);
         cpu_stat_buffer_unlock(buffer1);
 
-        if(cpu_stat_list_get_size(cpu_stat_list_old)!=cpu_stat_list_get_size(cpu_stat_list_old)) break;
-        
         size_t size = cpu_stat_list_get_size(cpu_stat_list_old);
+        if(size!=cpu_stat_list_get_size(cpu_stat_list_old)) break;
+        
         Cpu_usage_list* cpu_usage_list = cpu_usage_list_create();
         for(size_t i=0; i<size; i++)
         {
@@ -68,7 +68,9 @@ void* analyze_data(void* arg)
             long total_diff = total_new - total_old;
             long idle_diff = idle_new - idle_old;
 
-            float CPU_usage = (total_diff - idle_diff)*100.0 / total_diff;
+            double CPU_usage;
+            CPU_usage = total_diff==0 ? 0 : (double)(total_diff - idle_diff)*100.0 / (double)total_diff;
+
             cpu_usage_list_add(cpu_usage_list, cpu_num, CPU_usage);
             
         }
@@ -82,6 +84,7 @@ void* analyze_data(void* arg)
         cpu_usage_buffer_call_printer(buffer2);
         cpu_usage_buffer_unlock(buffer2);
 
+        // printf("analyzer:\n");
 
         // cpu_stat_buffer_print(buffer1);
         // cpu_usage_buffer_print(buffer2);
@@ -100,7 +103,7 @@ void analyzer_init(Cpu_stat_buffer* buffer1, Cpu_usage_buffer* buffer2)
     pthread_create(&tid, NULL, analyze_data, buffers);
 }
 
-void analyzer_join()
+void analyzer_join(void)
 {
     pthread_join(tid, NULL);
 }

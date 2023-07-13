@@ -11,9 +11,10 @@ struct Cpu_usage_list
 
 typedef struct Cpu_usage_node
 {
-    unsigned int cpu_num;
-    float percent;
     struct Cpu_usage_node* next;
+    double percent;
+    int cpu_num;
+    char padding[4];
 } Cpu_usage_node;
 
 Cpu_usage_list* cpu_usage_list_create(void)
@@ -29,7 +30,7 @@ Cpu_usage_list* cpu_usage_list_create(void)
     return list;
 }
 
-void cpu_usage_list_add(Cpu_usage_list* const list, const unsigned int cpu_num, const float percent)
+void cpu_usage_list_add(Cpu_usage_list* const list, const int cpu_num, const double percent)
 {
     if(list == NULL)
     {
@@ -75,7 +76,7 @@ void cpu_usage_list_delete(Cpu_usage_list* list)
     {
         while(list->head->next != NULL)
         {
-            Cpu_usage_node* prev;
+            Cpu_usage_node* prev = NULL;
             Cpu_usage_node* node = list->head;
             while(node->next != NULL)
             {
@@ -95,11 +96,11 @@ size_t cpu_usage_list_get_size(Cpu_usage_list* list)
     return list->size;
 }
 
-unsigned int cpu_usage_list_get_cpu_num(Cpu_usage_list* list, int n)
+int cpu_usage_list_get_cpu_num(Cpu_usage_list* list, size_t n)
 {
     if(n==0) return list->head->cpu_num;
     Cpu_usage_node* node = list->head;
-    for(int i=0; i<n; i++)
+    for(size_t i=0; i<n; i++)
     {
         if(node->next == NULL) return -1;
         node = node->next;
@@ -107,11 +108,11 @@ unsigned int cpu_usage_list_get_cpu_num(Cpu_usage_list* list, int n)
     return node->cpu_num;
 }
 
-float cpu_usage_list_get_percent(Cpu_usage_list* list, int n)
+double cpu_usage_list_get_percent(Cpu_usage_list* list, size_t n)
 {
     if(n==0) return list->head->percent;
     Cpu_usage_node* node = list->head;
-    for(int i=0; i<n; i++)
+    for(size_t i=0; i<n; i++)
     {
         if(node->next == NULL) return -1;
         node = node->next;
@@ -124,7 +125,7 @@ void cpu_usage_list_print(Cpu_usage_list* list)
     Cpu_usage_node* node = list->head;
     while(node!=NULL)
     {
-        printf("cpu%d: %f\n",
+        printf("cpu %d: %.3f\n",
         node->cpu_num, 
         node->percent);
         node = node->next;

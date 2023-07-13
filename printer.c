@@ -9,7 +9,7 @@
 
 static pthread_t tid;
 
-void* print_data(void* arg)
+static void* print_data(void* arg)
 {
     Cpu_usage_buffer* buffer = arg;
 
@@ -27,12 +27,13 @@ void* print_data(void* arg)
             else
                 printf("CPU %u. USAGE %.3f%%\n", cpu_usage_list_get_cpu_num(list, i), cpu_usage_list_get_percent(list, i));
         }
+        printf("---------------------------------------------------\n");
         cpu_usage_buffer_unlock(buffer);
 
         cpu_usage_list_delete(list);
         // printf("printer:\n");
         // cpu_usage_buffer_print(buffer);
-        sleep(1);
+        // sleep(0);
     }
     return NULL;
 }
@@ -42,7 +43,7 @@ void printer_init(Cpu_usage_buffer* buffer)
     pthread_create(&tid, NULL, print_data, buffer);
 }
 
-void printer_join()
+void printer_join(void)
 {
     pthread_join(tid, NULL);
 }

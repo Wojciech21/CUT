@@ -21,7 +21,7 @@ struct Cpu_stat_buffer
     pthread_mutex_t mutex;
     pthread_cond_t can_get;
     int item_count;
-    char paading[4];
+    char pading[4];
 };
 
 Cpu_stat_buffer* cpu_stat_buffer_create(void)
@@ -143,33 +143,4 @@ void cpu_stat_buffer_call_analyzer(Cpu_stat_buffer* buffer)
 void cpu_stat_buffer_wait_for_reader(Cpu_stat_buffer* buffer)
 {
     pthread_cond_wait(&buffer->can_get, &buffer->mutex);
-}
-
-void cpu_stat_buffer_print(Cpu_stat_buffer* buffer)
-{
-    // Cpu_stat_buffer_node* curr = buffer->tail;
-    // while(curr->next != buffer->tail)
-    // {
-    //     if(curr==buffer->tail)
-    //         printf("[T]");
-    //     if(curr==buffer->head)
-    //         printf("[H]");
-    //     if(curr->cpu_stat_list != NULL)
-    //         printf("X");
-    //     else
-    //         printf("_");
-    //     curr = curr->next;
-    // }
-    //  if(curr==buffer->tail)
-    //         printf("[T]");
-    //     if(curr==buffer->head)
-    //         printf("[H]");
-    //     if(curr->cpu_stat_list != NULL)
-    //         printf("X");
-    //     else
-    //         printf("_");
-    //     curr = curr->next;
-    // printf("\n");
-    printf("cpu_stat_buffer: %d/%d\n", buffer->item_count, BUFFER_SIZE);
-
 }

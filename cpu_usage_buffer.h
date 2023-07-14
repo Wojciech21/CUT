@@ -18,6 +18,4 @@ void cpu_usage_buffer_unlock(Cpu_usage_buffer* buffer);
 void cpu_usage_buffer_call_printer(Cpu_usage_buffer* buffer);
 void cpu_usage_buffer_wait_for_analyzer(Cpu_usage_buffer* buffer);
 
-void cpu_usage_buffer_print(Cpu_usage_buffer* buffer);
-
 #endif

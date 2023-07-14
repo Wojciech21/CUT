@@ -228,23 +228,3 @@ long cpu_stat_list_get_steal(Cpu_stat_list* list, size_t n)
     }
     return node->steal;
 }
-
-
-void cpu_stat_list_print(Cpu_stat_list* list)
-{
-    Cpu_stat_node* node = list->head;
-    while(node!=NULL)
-    {
-        printf("cpu%d: %lu %lu %lu %lu %lu %lu %lu %lu\n",
-        node->cpu_num, 
-        node->user, 
-        node->nice, 
-        node->system, 
-        node->idle, 
-        node->iowait, 
-        node->irq, 
-        node->softirq, 
-        node->steal);
-        node = node->next;
-    }
-}

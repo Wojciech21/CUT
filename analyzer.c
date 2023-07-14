@@ -33,14 +33,25 @@ static void* analyze_data(void* arg)
 
         Cpu_stat_list** cpu_stat_lists = cpu_stat_buffer_get_lists(buffer1);
         Cpu_stat_list* cpu_stat_list_old = cpu_stat_lists[0];
-        if(cpu_stat_list_old==NULL) break;
+        if(cpu_stat_list_old==NULL) 
+        {
+            printf("empty old list\n");
+            break;
+        }
         Cpu_stat_list* cpu_stat_list_new = cpu_stat_lists[1];
-        if(cpu_stat_list_new==NULL) break;
+        if(cpu_stat_list_new==NULL) 
+        {
+            printf("empty new list\n");
+            break;
+        }
         free(cpu_stat_lists);
-        cpu_stat_buffer_unlock(buffer1);
 
         size_t size = cpu_stat_list_get_size(cpu_stat_list_old);
-        if(size!=cpu_stat_list_get_size(cpu_stat_list_old)) break;
+        if(size!=cpu_stat_list_get_size(cpu_stat_list_old)) 
+        {
+            printf("size changed\n");
+            break;
+        }
         
         Cpu_usage_list* cpu_usage_list = cpu_usage_list_create();
         for(size_t i=0; i<size; i++)
@@ -75,19 +86,12 @@ static void* analyze_data(void* arg)
             
         }
         cpu_stat_list_delete(cpu_stat_list_old); 
+        cpu_stat_buffer_unlock(buffer1);
         
-
-        // sleep(3);
-
         cpu_usage_buffer_lock(buffer2);
         cpu_usage_buffer_add_list(buffer2, cpu_usage_list);
         cpu_usage_buffer_call_printer(buffer2);
         cpu_usage_buffer_unlock(buffer2);
-
-        // printf("analyzer:\n");
-
-        // cpu_stat_buffer_print(buffer1);
-        // cpu_usage_buffer_print(buffer2);
    }
    return NULL;
 }

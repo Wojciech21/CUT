@@ -142,31 +142,3 @@ void cpu_usage_buffer_wait_for_analyzer(Cpu_usage_buffer* buffer)
 {
     pthread_cond_wait(&buffer->can_get, &buffer->mutex);
 }
-
-void cpu_usage_buffer_print(Cpu_usage_buffer* buffer)
-{
-    // Cpu_usage_buffer_node* curr = buffer->tail;
-    // while(curr->next != buffer->tail)
-    // {
-    //     if(curr==buffer->tail)
-    //         printf("[T]");
-    //     if(curr==buffer->head)
-    //         printf("[H]");
-    //     if(curr->cpu_usage_list != NULL)
-    //         printf("X");
-    //     else
-    //         printf("_");
-    //     curr = curr->next;
-    // }
-    //  if(curr==buffer->tail)
-    //         printf("[T]");
-    //     if(curr==buffer->head)
-    //         printf("[H]");
-    //     if(curr->cpu_usage_list != NULL)
-    //         printf("X");
-    //     else
-    //         printf("_");
-    //     curr = curr->next;
-    // printf("\n");
-    printf("cpu_usage_buffer: %d/%d\n", buffer->item_count, BUFFER_SIZE);
-}

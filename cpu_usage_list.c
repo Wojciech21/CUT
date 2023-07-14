@@ -119,15 +119,3 @@ double cpu_usage_list_get_percent(Cpu_usage_list* list, size_t n)
     }
     return node->percent;
 }
-
-void cpu_usage_list_print(Cpu_usage_list* list)
-{
-    Cpu_usage_node* node = list->head;
-    while(node!=NULL)
-    {
-        printf("cpu %d: %.3f\n",
-        node->cpu_num, 
-        node->percent);
-        node = node->next;
-    }
-}

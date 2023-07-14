@@ -26,5 +26,4 @@ long cpu_stat_list_get_irq(Cpu_stat_list* list, size_t n);
 long cpu_stat_list_get_softirq(Cpu_stat_list* list, size_t n);
 long cpu_stat_list_get_steal(Cpu_stat_list* list, size_t n);
 
-void cpu_stat_list_print(Cpu_stat_list* list);
 #endif

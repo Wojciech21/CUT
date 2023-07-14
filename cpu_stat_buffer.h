@@ -18,6 +18,4 @@ void cpu_stat_buffer_unlock(Cpu_stat_buffer* buffer);
 void cpu_stat_buffer_call_analyzer(Cpu_stat_buffer* buffer);
 void cpu_stat_buffer_wait_for_reader(Cpu_stat_buffer* buffer);
 
-void cpu_stat_buffer_print(Cpu_stat_buffer* buffer);
-
 #endif

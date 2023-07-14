@@ -10,7 +10,4 @@ size_t cpu_usage_list_get_size(Cpu_usage_list* list);
 int cpu_usage_list_get_cpu_num(Cpu_usage_list* list, size_t n);
 double cpu_usage_list_get_percent(Cpu_usage_list* list, size_t n);
 
-
-
-void cpu_usage_list_print(Cpu_usage_list* list);
 #endif

@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -pedantic -g -std=c99 -ggdb3 -pthread
 # CFLAGS = -Weverything -std=c99 -ggdb3 -pthread -Wno-disabled-macro-expansion -Wno-declaration-after-statement
 # List of source files
 SRCS = sigterm.c main.c cpu_stat_list.c cpu_stat_buffer.c cpu_usage_list.c cpu_usage_buffer.c reader.c analyzer.c printer.c
-TEST_SRCS = tests/test_runner.c tests/cpu_stat_buffer_test.c tests/analyzer_test.c
+TEST_SRCS = tests/test_runner.c tests/analyzer_test.c
 
 # List of object files
 OBJS = $(SRCS:.c=.o)

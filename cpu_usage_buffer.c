@@ -6,7 +6,7 @@
 #include "cpu_usage_buffer.h"
 
 
-#define BUFFER_SIZE 20
+#define USAGE_BUFFER_SIZE 20
 
 typedef struct Cpu_usage_buffer_node
 {
@@ -49,7 +49,7 @@ Cpu_usage_buffer* cpu_usage_buffer_create(void)
     };
 
     Cpu_usage_buffer_node* temp = first_node;
-    for(int i=0; i<BUFFER_SIZE-1; i++)
+    for(int i=0; i<USAGE_BUFFER_SIZE-1; i++)
     {
         temp->cpu_usage_list = NULL;
         temp->next = malloc(sizeof(Cpu_usage_buffer_node));
@@ -74,7 +74,7 @@ void cpu_usage_buffer_add_list(Cpu_usage_buffer* buffer, Cpu_usage_list* list)
     cpu_usage_list_delete(buffer->head->cpu_usage_list);
     buffer->head->cpu_usage_list = list;
     buffer->head = buffer->head->next;
-    if(buffer->item_count < BUFFER_SIZE)
+    if(buffer->item_count < USAGE_BUFFER_SIZE)
     {
         buffer->item_count++;
     }

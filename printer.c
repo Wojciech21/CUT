@@ -26,15 +26,17 @@ static void* print_data(void* arg)
         for(size_t i=0; i<size; i++)
         {
             if(i==0)
-                printf("%-4s %-10s %-5.3f %%\n", "CPU", "AVG USAGE", cpu_usage_list_get_percent(list, 0));
+                printf("%-4s %-4s %-5.3f %%\n", "CPU", "AVG", cpu_usage_list_get_percent(list, 0));
             else
-                printf("%-4s %-10u %-5.3f %%\n", "CPU", cpu_usage_list_get_cpu_num(list, i), cpu_usage_list_get_percent(list, 0));
+                printf("%-4s %-4u %-5.3f %%\n", "CPU", cpu_usage_list_get_cpu_num(list, i), cpu_usage_list_get_percent(list, 0));
         }
-        printf("-------------------------\n");
+        printf("--------------------\n");
         cpu_usage_list_delete(list);
         cpu_usage_buffer_unlock(buffer);
         sleep(1);
     }
+    printf("\n");
+
     return NULL;
 }
 

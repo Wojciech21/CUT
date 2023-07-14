@@ -5,7 +5,7 @@
 #include "cpu_stat_buffer.h"
 
 
-#define BUFFER_SIZE 20
+#define STAT_BUFFER_SIZE 20
 
 typedef struct Cpu_stat_buffer_node
 {
@@ -48,7 +48,7 @@ Cpu_stat_buffer* cpu_stat_buffer_create(void)
     };
 
     Cpu_stat_buffer_node* temp = first_node;
-    for(int i=0; i<BUFFER_SIZE-1; i++)
+    for(int i=0; i<STAT_BUFFER_SIZE-1; i++)
     {
         temp->cpu_stat_list = NULL;
         temp->next = calloc(1, sizeof(Cpu_stat_buffer_node));
@@ -73,7 +73,7 @@ void cpu_stat_buffer_add_list(Cpu_stat_buffer* buffer, Cpu_stat_list* list)
     cpu_stat_list_delete(buffer->head->cpu_stat_list);
     buffer->head->cpu_stat_list = list;
     buffer->head = buffer->head->next;
-    if(buffer->item_count < BUFFER_SIZE)
+    if(buffer->item_count < STAT_BUFFER_SIZE)
     {
         buffer->item_count++;
     }

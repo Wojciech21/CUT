@@ -15,6 +15,7 @@ static void* print_data(void* arg)
 
     while(!sigterm_is_done())
     {
+        sleep(1);
         cpu_usage_buffer_lock(buffer);
         if(cpu_usage_buffer_is_empty(buffer)) 
         {
@@ -33,19 +34,20 @@ static void* print_data(void* arg)
         printf("--------------------\n");
         cpu_usage_list_delete(list);
         cpu_usage_buffer_unlock(buffer);
-        sleep(1);
     }
     printf("\n");
 
     return NULL;
 }
 
-void printer_init(Cpu_usage_buffer* buffer)
+int printer_init(Cpu_usage_buffer* buffer)
 {
-    pthread_create(&tid, NULL, print_data, buffer);
+    if(pthread_create(&tid, NULL, print_data, buffer) != 0) return -1;
+    return 1;
 }
 
-void printer_join(void)
+int printer_join(void)
 {
-    pthread_join(tid, NULL);
+    if(pthread_join(tid, NULL) != 0) return -1;
+    return 1;
 }

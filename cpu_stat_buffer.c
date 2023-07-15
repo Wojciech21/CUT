@@ -36,6 +36,7 @@ Cpu_stat_buffer* cpu_stat_buffer_create(void)
     if(first_node == NULL)
     {
         printf("buffer node memory allocation error\n");
+        free(buffer);
         return NULL;
     }
     *buffer = (Cpu_stat_buffer)
@@ -55,6 +56,7 @@ Cpu_stat_buffer* cpu_stat_buffer_create(void)
         if(temp->next == NULL)
         {
             printf("buffer node memory allocation error\n");
+            cpu_stat_buffer_delete(buffer);
             return NULL;
         }
         temp = temp->next;

@@ -7,9 +7,9 @@
 void analyzer_test()
 {
     double eps = 0.001;
-    #undef STAT_BUFFER_SIZE
-    #define STAT_BUFFER_SIZE 2
-    assert(STAT_BUFFER_SIZE==2);
+    // #undef STAT_BUFFER_SIZE
+    // #define STAT_BUFFER_SIZE 5
+    // assert(STAT_BUFFER_SIZE==5);
     Cpu_stat_buffer* cpu_stat_buffer = cpu_stat_buffer_create();
     Cpu_stat_list* cpu_stat_list = cpu_stat_list_create();
     cpu_stat_list_add(cpu_stat_list, 1, 91, 25, 47, 31, 10, 40, 98, 90);
@@ -34,10 +34,10 @@ void analyzer_test()
     analyze_data(cpu_stat_buffer, cpu_usage_buffer);
     analyze_data(cpu_stat_buffer, cpu_usage_buffer);
 
+
     Cpu_usage_list* cpu_usage_list = cpu_usage_buffer_get_list(cpu_usage_buffer);
     assert(cpu_usage_list_get_size(cpu_usage_list)==2);
     assert(cpu_usage_list_get_cpu_num(cpu_usage_list, 0)==1);
-    // printf("%f\n", fabs(cpu_usage_list_get_percent(cpu_usage_list, 0)-71.554));
     assert(fabs(cpu_usage_list_get_percent(cpu_usage_list, 0)-71.554)<=eps);
     assert(cpu_usage_list_get_cpu_num(cpu_usage_list, 1)==2);
     assert(fabs(cpu_usage_list_get_percent(cpu_usage_list, 1)-0)<=eps);

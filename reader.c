@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <signal.h>
 
 #include "reader.h"
 #include "cpu_stat_list.h"
@@ -24,7 +25,8 @@ static void* read_file(void* arg)
         if (file == NULL)
         {
             printf("Failed to open the file.\n");
-            break;
+            kill(getpid(), SIGINT);
+            return NULL;
         }
 
         int i=0;
@@ -36,7 +38,9 @@ static void* read_file(void* arg)
             if(scanVal<8)
             {
                 printf("read file error\n");
-                break;
+                fclose(file);
+                kill(getpid(), SIGINT);
+                return NULL;
             }
             cpu_stat_list_add(cpu_stat_list, i, user, nice, system, idle, iowait, irq, softirg, steal);
             i++;
@@ -48,15 +52,18 @@ static void* read_file(void* arg)
         cpu_stat_buffer_call_analyzer(buffer);
         cpu_stat_buffer_unlock(buffer);
     }
+    
     return NULL;
 }
 
-void reader_init(Cpu_stat_buffer* buffer)
+int reader_init(Cpu_stat_buffer* buffer)
 {
-    pthread_create(&tid, NULL, read_file, buffer);
+    if(pthread_create(&tid, NULL, read_file, buffer) != 0) return -1;
+    return 1;
 }
 
-void reader_join(void)
+int reader_join(void)
 {
-    pthread_join(tid, NULL);
+    if(pthread_join(tid, NULL) != 0) return -1;
+    return 1;
 }

@@ -12,7 +12,7 @@ static void term(int signum)
     done = signum;
 }
  
-void sigterm_init(void)
+int sigterm_init(void)
 {
     struct sigaction action;
     memset(&action, 0, sizeof(struct sigaction));
@@ -20,13 +20,14 @@ void sigterm_init(void)
     if (sigaction(SIGTERM, &action, NULL) == -1)
     {
         printf("error setting handler\n");
-        return;
+        return -1;
     }
     if (sigaction(SIGINT, &action, NULL) == -1) 
     {
         printf("error setting handler\n");
-        return;
+        return -1;
     }
+    return 0;
 }
 
 bool sigterm_is_done(void)

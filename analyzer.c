@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <signal.h>
 
 #include "analyzer.h"
 #include "cpu_stat_list.h"
@@ -25,12 +26,17 @@ static void* thread_loop(void* arg)
 
    while(!sigterm_is_done())
    {
-        analyze_data(buffer1, buffer2);
+        if(analyze_data(buffer1, buffer2)==-1) 
+        {
+            kill(getpid(), SIGINT);
+            return NULL;
+        }
    }
+
    return NULL;
 }
 
-void analyze_data(Cpu_stat_buffer* buffer1, Cpu_usage_buffer* buffer2)
+int analyze_data(Cpu_stat_buffer* buffer1, Cpu_usage_buffer* buffer2)
 {
     cpu_stat_buffer_lock(buffer1);
     if(cpu_stat_buffer_is_empty(buffer1)) 
@@ -43,12 +49,17 @@ void analyze_data(Cpu_stat_buffer* buffer1, Cpu_usage_buffer* buffer2)
     if(cpu_stat_list_old==NULL) 
     {
         printf("empty old list\n");
-        
+        cpu_stat_buffer_unlock(buffer1);
+        free(cpu_stat_lists);
+        return -1;
     }
     Cpu_stat_list* cpu_stat_list_new = cpu_stat_lists[1];
     if(cpu_stat_list_new==NULL) 
     {
         printf("empty new list\n");
+        cpu_stat_buffer_unlock(buffer1);
+        free(cpu_stat_lists);
+        return -1;
     }
     free(cpu_stat_lists);
 
@@ -56,6 +67,8 @@ void analyze_data(Cpu_stat_buffer* buffer1, Cpu_usage_buffer* buffer2)
     if(size!=cpu_stat_list_get_size(cpu_stat_list_old)) 
     {
         printf("size changed\n");
+        cpu_stat_buffer_unlock(buffer1);
+        return -1;
     }
     
     Cpu_usage_list* cpu_usage_list = cpu_usage_list_create();
@@ -97,20 +110,27 @@ void analyze_data(Cpu_stat_buffer* buffer1, Cpu_usage_buffer* buffer2)
     cpu_usage_buffer_add_list(buffer2, cpu_usage_list);
     cpu_usage_buffer_call_printer(buffer2);
     cpu_usage_buffer_unlock(buffer2);
+    return 1;
 }
 
-void analyzer_init(Cpu_stat_buffer* buffer1, Cpu_usage_buffer* buffer2)
+int analyzer_init(Cpu_stat_buffer* buffer1, Cpu_usage_buffer* buffer2)
 {
+    if(buffer1 == NULL) return -1;
+    if(buffer2 == NULL) return -1;
+
     struct Buffers* buffers = calloc(1, sizeof(*buffers));
+    if(buffers == NULL) return -1;
     *buffers = (struct Buffers)
     {
         .buffer1 = buffer1,
         .buffer2 = buffer2
     };
-    pthread_create(&tid, NULL, thread_loop, buffers);
+    if(pthread_create(&tid, NULL, thread_loop, buffers) != 0) return -1;
+    return 1;
 }
 
-void analyzer_join(void)
+int analyzer_join(void)
 {
-    pthread_join(tid, NULL);
+    if(pthread_join(tid, NULL)!=0) return -1;
+    return 1;
 }

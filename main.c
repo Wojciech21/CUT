@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <unistd.h>
+
 
 #include "reader.h"
 #include "analyzer.h"
@@ -11,20 +13,24 @@
 
 int main(void)
 {
-    sigterm_init();
-    Cpu_stat_buffer* buffer1 = cpu_stat_buffer_create();
-    Cpu_usage_buffer* buffer2 = cpu_usage_buffer_create();
+    if(sigterm_init()==-1) return -1;
+    Cpu_stat_buffer* cpu_stat_buffer = cpu_stat_buffer_create();
+    if(cpu_stat_buffer == NULL) return -1;
+    Cpu_usage_buffer* cpu_usage_buffer = cpu_usage_buffer_create();
+    if(cpu_usage_buffer == NULL) goto cpu_usage_buffer_failed;
 
-    reader_init(buffer1);
-    analyzer_init(buffer1, buffer2);
-    printer_init(buffer2);
+    if(reader_init(cpu_stat_buffer)==-1) goto thread_init_failed;
+    if(analyzer_init(cpu_stat_buffer, cpu_usage_buffer)==-1) goto thread_init_failed;
+    if(printer_init(cpu_usage_buffer)==-1) goto thread_init_failed;
 
-    reader_join();
-    analyzer_join();
-    printer_join();
+thread_init_failed:
+    if(printer_join()==-1) goto thread_join_failed;
+    if(analyzer_join()==-1) goto thread_join_failed;
+    if(reader_join()==-1) goto thread_join_failed;
 
-    cpu_stat_buffer_delete(buffer1);
-    cpu_usage_buffer_delete(buffer2);
-
+thread_join_failed:
+    cpu_usage_buffer_delete(cpu_usage_buffer);
+cpu_usage_buffer_failed:
+    cpu_stat_buffer_delete(cpu_stat_buffer);
     return 0;
 }

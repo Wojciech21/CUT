@@ -2,14 +2,13 @@
 #include <assert.h>
 #include <math.h>
 
+#include "analyzer_test.h"
 #include "../analyzer.h"
 
-void analyzer_test()
+void analyzer_test(void)
 {
     double eps = 0.001;
-    // #undef STAT_BUFFER_SIZE
-    // #define STAT_BUFFER_SIZE 5
-    // assert(STAT_BUFFER_SIZE==5);
+
     Cpu_stat_buffer* cpu_stat_buffer = cpu_stat_buffer_create();
     Cpu_stat_list* cpu_stat_list = cpu_stat_list_create();
     cpu_stat_list_add(cpu_stat_list, 1, 91, 25, 47, 31, 10, 40, 98, 90);
